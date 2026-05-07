@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Countdown</title>
+
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:#121212;
+      font-family:Arial;
+    }
+
+    .countdown{
+      color:white;
+      font-size:60px;
+      font-weight:bold;
+      background:#1e1e1e;
+      padding:20px 40px;
+      border-radius:20px;
+      box-shadow:0 0 20px cyan;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="countdown" id="timer"></div>
+
+  <script>
+    const timer = document.getElementById("timer");
+
+    // durasi countdown (90 detik)
+    const durasi = 35340;
+
+    // cek apakah sudah ada waktu selesai tersimpan
+    let selesai = localStorage.getItem("selesai");
+
+    // kalau belum ada, buat waktu selesai baru
+    if(!selesai){
+      selesai = Date.now() + (durasi * 1000);
+      localStorage.setItem("selesai", selesai);
+    }
+
+    function updateCountdown(){
+
+      let sisa = Math.floor((selesai - Date.now()) / 1000);
+
+      if(sisa <= 0){
+        timer.textContent = "SELESAI";
+        localStorage.removeItem("selesai");
+        clearInterval(hitung);
+        return;
+      }
+
+      let jam = Math.floor(sisa / 3600);
+      let menit = Math.floor((sisa % 3600) / 60);
+      let detik = sisa % 60;
+
+      jam = String(jam).padStart(2, "0");
+      menit = String(menit).padStart(2, "0");
+      detik = String(detik).padStart(2, "0");
+
+      timer.textContent = `${jam}:${menit}:${detik}`;
+    }
+
+    updateCountdown();
+
+    const hitung = setInterval(updateCountdown, 1000);
+  </script>
+
+</body>
+</html>
